@@ -63,7 +63,7 @@ int						main()
 
 	// 쓰레드 종료를 기다린다.
 	// pthread_join(p_thread[0], (void **)&status);
-	// pthread_join(p_thread[1], (void **)&status);
+	pthread_join(p_thread[1], (void **)&status);
 
 	printf("언제 종료 될까요?\n");
 
