@@ -4,25 +4,26 @@
 #include <stdlib.h>
 
 // 쓰레드 함수
-void *t_function(void *data)
+void					*t_function(void *data)
 {
-	pid_t pid;				// process id
-	pthread_t tid;			// thread id
+	pid_t				pid;			// process id
+	pthread_t			tid;			// thread id
+	int					i;
+	char*				thread_name;
 
 	pid = getpid();
 	tid = pthread_self();
-
-	char* thread_name = (char*)data;
-	int i = 0;
-
-	while (i<3)				// 0,1,2 까지만 loop 돌립니다.
+	thread_name = (char *)data;
+	i = 0;
+	while (i < 3)				// 0,1,2 까지만 loop 돌립니다.
 	{
 		// 넘겨받은 쓰레드 이름과
 		// 현재 process id 와 thread id 를 함께 출력
 		printf("[%s] pid:%u, tid:%x --- %d\n", thread_name, (unsigned int)pid, (unsigned int)tid, i);
 		i++;
-		sleep(1);	// 1초간 대기
+		// sleep(1);	// 1초간 대기
 	}
+	return (NULL);
 }
 
 int						main()
@@ -59,9 +60,10 @@ int						main()
 	// ③ main() 함수에서도 쓰레드에서 돌아가고 있는 동일한 함수 실행
 	t_function((void *)pM);
 
+
 	// 쓰레드 종료를 기다린다.
-	pthread_join(p_thread[0], (void **)&status);
-	pthread_join(p_thread[1], (void **)&status);
+	// pthread_join(p_thread[0], (void **)&status);
+	// pthread_join(p_thread[1], (void **)&status);
 
 	printf("언제 종료 될까요?\n");
 
