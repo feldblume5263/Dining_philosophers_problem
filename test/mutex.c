@@ -27,18 +27,23 @@ void				*count(void *arg)
 
 int					main()
 {
-	pthread_t		thread1,thread2, pm;
+	pthread_t		thread1;
+	pthread_t		thread2;
+	pthread_t		thread3;
 
 	pthread_mutex_init(&mutex, NULL);
 
 	pthread_create(&thread1, NULL, count, (void *)"thread1");
 	pthread_create(&thread2, NULL, count, (void *)"thread2");
+	pthread_create(&thread2, NULL, count, (void *)"thread3");
 
 
 	count((void *)"pm");
 	pthread_join(thread1, NULL);
 	pthread_join(thread2, NULL);
-	// pthread_detach(thread1);
-	// pthread_detach(thread2);
+	pthread_join(thread3, NULL);
+	pthread_detach(thread1);
+	pthread_detach(thread2);
+	pthread_detach(thread3);
 	pause();
 }
