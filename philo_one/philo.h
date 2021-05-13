@@ -6,7 +6,7 @@
 /*   By: junhpark <junhpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/12 14:11:13 by junhpark          #+#    #+#             */
-/*   Updated: 2021/05/12 16:25:35 by junhpark         ###   ########.fr       */
+/*   Updated: 2021/05/13 21:01:59 by junhpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ t_info				g_info;
 /*
 ** main.c
 */
-int					start(t_philo *philos, t_info *info);
+int					start(t_philo *philos);
 int					main(int argc, char *argv[]);
 void				*test(void *param);
 void				free_all(t_philo *philos);
@@ -94,7 +94,7 @@ double				make_ten(int size);
 unsigned long		get_present_time();
 unsigned long		get_relative_time();
 int					spend_time_of(t_status doing);
-void				accurate_sleep(unsigned long milisecond);
+void				accurate_pause(unsigned long milisecond);
 int					find_error(const char *str);
 int					pass_ch_len_num(const char *str);
 
@@ -105,7 +105,7 @@ int					eat(t_philo *philo, t_info *info);
 void				*monitoring(void *param);
 int					doing(t_status status, t_philo *philo, unsigned long interval);
 void				*philo_do(void *param);
-int					print_doing(t_status status, t_philo *philo);
+int					print_doing(t_status status, t_philo *philo, unsigned long interval);
 bool				is_all_philos_full();
 
 /*

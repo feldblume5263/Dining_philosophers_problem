@@ -6,7 +6,7 @@
 /*   By: junhpark <junhpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/12 14:11:07 by junhpark          #+#    #+#             */
-/*   Updated: 2021/05/12 21:03:30 by junhpark         ###   ########.fr       */
+/*   Updated: 2021/05/13 21:11:07 by junhpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	free_all(t_philo *philos)
 	free(g_info.full_list);
 }
 
-int		start(t_philo *philos, t_info *info)
+int		start(t_philo *philos)
 {
 	int			count;
 
@@ -30,6 +30,7 @@ int		start(t_philo *philos, t_info *info)
 		pthread_create(&philos[count].thread, NULL, philo_do, (void *)&philos[count]);
 		count += 2;
 	}
+	accurate_pause(50);
 	count = 1;
 	while (count < g_philo_num)
 	{
@@ -59,7 +60,7 @@ int		main(int argc, char *argv[])
 	philos = malloc(sizeof(t_philo) * g_philo_num);
 	set_philos(philos);
 	mutex_init(&g_info);
-	start(philos, &g_info);
+	start(philos);
 	free_all(philos);
 	return (0);
 }

@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address
 NAME = philo_one
 SRCS = do_eat.c do.c main.c setting.c time.c \
 		ft_atoi.c
@@ -10,7 +10,7 @@ all : $(NAME)
 # 	$(CC) -c $< -o $@
 $(NAME) :
 	$(CC) $(CFLAGS) $(SRCS) -o $(NAME);
-	
+
 .PHONY: clean bonus re fclean all
 
 clean :

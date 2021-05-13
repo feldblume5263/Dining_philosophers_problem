@@ -6,7 +6,7 @@
 /*   By: junhpark <junhpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/12 14:11:26 by junhpark          #+#    #+#             */
-/*   Updated: 2021/05/12 14:55:27 by junhpark         ###   ########.fr       */
+/*   Updated: 2021/05/13 20:09:53 by junhpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,22 +42,22 @@ int					spend_time_of(t_status doing)
 		milisecond = g_info.time_to_eat;
 	if (doing == SLEEPING)
 		milisecond = g_info.time_to_sleep;
-	accurate_sleep(milisecond);
+	accurate_pause(milisecond);
 	return (1);
 }
 
 
 // NOTE usleep() 대신에 이 함수를 쓰는 이유를 아래 슬랙을 통해서 숙지하길 바람.
 // https://42born2code.slack.com/archives/CU6MU5TB7/p1608577708286600?thread_ts=1608559809.272100&cid=CU6MU5TB7
-void			accurate_sleep(unsigned long milisecond)
+void			accurate_pause(unsigned long milisecond)
 {
 	unsigned long	base;
 	unsigned long	cur;
 
-	base = get_absolute_time();
+	base = get_present_time();
 	while (1)
 	{
-		cur = get_absolute_time();
+		cur = get_present_time();
 		if (milisecond < (cur - base))
 			return ;
 		usleep(500);

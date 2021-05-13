@@ -6,23 +6,36 @@
 /*   By: junhpark <junhpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/12 14:10:51 by junhpark          #+#    #+#             */
-/*   Updated: 2021/05/13 17:52:42 by junhpark         ###   ########.fr       */
+/*   Updated: 2021/05/13 21:40:29 by junhpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int		print_doing(t_status status, t_philo *philo)
+int		print_doing(t_status status, t_philo *philo, unsigned long interval)
 {
 	// NOTE 이 함수에서 printf는 이런 것들이 호출 됬음. 적절한 조건문을 활용하길 바람.
-	/*
-	printf("is eating\n");
-	printf("is sleeping\n");
-	printf("is thinking\n");
-	printf("has taken a fork\n");
-	printf("has taken a fork\n");
-	printf("is died\n");
-	*/
+	printf("[%lu]\t %d\t", interval, philo->index + 1);
+	if (g_info.meal_full != FALSE && g_info.full_list[philo->index] == true)
+	{
+		printf("is now full and happy   :)\n");
+		return (END);
+	}
+	else if (status == EATING)
+		printf("is eating\n");
+	else if (status == SLEEPING)
+		printf("is sleeping\n");
+	else if (status == THINKING)
+		printf("is thinking\n");
+	else if (status == LEFT_TAKEN || status == RIGHT_TAKEN)
+		printf("has taken a fork\n");
+	else if (status == DEAD)
+	{
+		g_info.anyone_dead = true;
+		printf("is died\n");
+		return (END);
+	}
+	return (CONTINUE);
 }
 
 int		doing(t_status status, t_philo *philo, unsigned long interval)
@@ -38,12 +51,10 @@ int		doing(t_status status, t_philo *philo, unsigned long interval)
 	if (is_all_philos_full() == TRUE)
 	{
 		pthread_mutex_unlock(&g_info.print_mutex);
-		printf("All Philosophers are now full and happy:)\n");
 		return (END);
 	}
-	printf("[%lu]/t %d ", interval, philo->index + 1);
+	ret = print_doing(status, philo, interval);
 	pthread_mutex_unlock(&g_info.print_mutex);
-	ret = print_doing(status, philo);
 	// NOTE 상태에 따라서 philo_do의 while(1)을 나갈 수 있게 함.(exit()을 쓰는 것이 편할지 모르지만, 안 써도 충분히 가능함.)
 	if (ret == CONTINUE)
 		return (CONTINUE);
@@ -77,11 +88,18 @@ void	*monitoring(void *param)
 
 	while (1)
 	{
-		// NOTE 확인해야하는 것
-		// 1. 어느 한명이라도 죽었다면, break; (내가 아니더라도, 누군가 죽었으면 Stop!)
-		// 2. 인자가 주어진 경우 모든 철학자가 밥을 먹었으면, break;
-		// 3. 시간 계산을 해서, 현재 이 모니터함수가 관찰하고 있는 철학자가 죽었다면, dead 출력 후 break;
+		time = get_relative_time();
+		if ((time - philo->when_eat) > g_info.time_to_die)
+		{
+			doing(DEAD, philo, time);
+			break ;
+		}
+		if (g_info.anyone_dead == TRUE)
+			break ;
+		if (is_all_philos_full() == true)
+			break ;
 	}
+	accurate_pause(5);
 	return (NULL);
 }
 
@@ -92,13 +110,16 @@ void	*philo_do(void *param)
 
 	philo = (t_philo *)param;
 	pthread_create(&thread, NULL, monitoring, philo);
-	accurate_sleep(30);
 	// NOTE 먹고 자고 생각하고
 	while (1)
 	{
-		// 1. 먹고
-		// 2. 자고
-		// 3. 생각하고
+		if (eat(philo, &g_info) == END)
+			break ;
+		if (doing(SLEEPING, philo, get_relative_time()) == END)
+			break ;
+		spend_time_of(SLEEPING);
+		if (doing(THINKING, philo, get_relative_time()) == END)
+			break ;
 	}
 	pthread_join(thread, NULL);
 	return (NULL);
