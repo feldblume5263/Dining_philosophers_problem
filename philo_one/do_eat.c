@@ -6,7 +6,7 @@
 /*   By: junhpark <junhpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/12 14:10:44 by junhpark          #+#    #+#             */
-/*   Updated: 2021/05/12 14:10:45 by junhpark         ###   ########.fr       */
+/*   Updated: 2021/05/13 16:37:50 by junhpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,23 @@
 // NOTE 철학자가 죽지 않도록하는 나의 알고리즘임
 int	eat_one_direction(t_philo *philo, t_info *info)
 {
+	pthread_mutex_lock(&info->forks[philo->right_fork_num]);
+	pthread_mutex_lock(&info->forks[philo->left_fork_num]);
+	spend_time_of(EATING);
+	pthread_mutex_unlock(&info->forks[philo->right_fork_num]);
+	pthread_mutex_unlock(&info->forks[philo->left_fork_num]);
+	return (CONTINUE);
 }
 
 // NOTE 먹는 행위.
 int	eat(t_philo *philo, t_info *info)
 {
+	if (g_info.anyone_dead == TRUE)
+		return (END);
 	// 1. 누군가 죽었는지 판단해서 죽었다면, 바로 return
 	// 2. 먹는 알고리즘 info->forks에 대해서 mutex가 쓰임. 매우매우 중요한 부분
 
 	// 나는 철학자가 죽지 않게 하는 알고리즘으로써 아래 함수를 썼음. 본인 방법을 생각해보면 좋을 듯
 	// eat_one_direction(t_philo *philo, t_info *info)
 }
+

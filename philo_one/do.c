@@ -6,7 +6,7 @@
 /*   By: junhpark <junhpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/12 14:10:51 by junhpark          #+#    #+#             */
-/*   Updated: 2021/05/12 21:12:11 by junhpark         ###   ########.fr       */
+/*   Updated: 2021/05/13 17:52:42 by junhpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,20 @@ int		doing(t_status status, t_philo *philo, unsigned long interval)
 	int	ret;
 
 	pthread_mutex_lock(&g_info.print_mutex);
-	//
-	///*
-	//먹고, 자고, 죽고
-	//누군가 죽고, 다 먹었고, etc...
-	//모든 출력은 이 안에서, 그리고 아래 있는 함수 print_doing() 에서 일어남.
-	//// TODO Hint
-	//ret = print_doing(t_status status, t_philo *philo)
-	//*/
-	//
+	if (g_info.anyone_dead == TRUE)
+	{
+		pthread_mutex_unlock(&g_info.print_mutex);
+		return (END);
+	}
+	if (is_all_philos_full() == TRUE)
+	{
+		pthread_mutex_unlock(&g_info.print_mutex);
+		printf("All Philosophers are now full and happy:)\n");
+		return (END);
+	}
+	printf("[%lu]/t %d ", interval, philo->index + 1);
 	pthread_mutex_unlock(&g_info.print_mutex);
+	ret = print_doing(status, philo);
 	// NOTE 상태에 따라서 philo_do의 while(1)을 나갈 수 있게 함.(exit()을 쓰는 것이 편할지 모르지만, 안 써도 충분히 가능함.)
 	if (ret == CONTINUE)
 		return (CONTINUE);
@@ -48,8 +52,20 @@ int		doing(t_status status, t_philo *philo, unsigned long interval)
 	return (END);
 }
 
-bool	is_all_philos_full(void)
+bool	is_all_philos_full()
 {
+	int				idx;
+
+	idx = 0;
+	if (g_info.meal_full == FALSE)
+		return (FALSE);
+	while (idx < g_philo_num)
+	{
+		if (g_info.full_list[idx] == FALSE)
+			return (FALSE);
+		idx++;
+	}
+	return (TRUE);
 }
 
 void	*monitoring(void *param)
