@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yunslee <yunslee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: junhpark <junhpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/08 21:18:01 by yunslee           #+#    #+#             */
-/*   Updated: 2021/03/08 21:19:11 by yunslee          ###   ########.fr       */
+/*   Created: 2021/05/12 14:11:26 by junhpark          #+#    #+#             */
+/*   Updated: 2021/05/12 14:55:27 by junhpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-unsigned long	get_absolute_time(void)
+unsigned long		get_present_time(void)
 {
 	struct timeval	time;
 	unsigned long	milisecond;
@@ -22,9 +22,9 @@ unsigned long	get_absolute_time(void)
 	return (milisecond);
 }
 
-unsigned long	get_relative_time(void)
+unsigned long		get_relative_time(void)
 {
-	struct timeval	time;
+	struct			timeval	time;
 	unsigned long	milisecond;
 	unsigned long	relative_milisecond;
 
@@ -34,9 +34,9 @@ unsigned long	get_relative_time(void)
 	return (relative_milisecond);
 }
 
-int				spend_time_of(t_status doing)
+int					spend_time_of(t_status doing)
 {
-	unsigned long milisecond;
+	unsigned long	milisecond;
 
 	if (doing == EATING)
 		milisecond = g_info.time_to_eat;
@@ -58,7 +58,7 @@ void			accurate_sleep(unsigned long milisecond)
 	while (1)
 	{
 		cur = get_absolute_time();
-		if (milisecond < cur - base)
+		if (milisecond < (cur - base))
 			return ;
 		usleep(500);
 	}

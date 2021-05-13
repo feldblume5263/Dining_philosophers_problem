@@ -3,30 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yunslee <yunslee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: junhpark <junhpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/08 21:15:00 by yunslee           #+#    #+#             */
-/*   Updated: 2021/03/09 01:08:50 by yunslee          ###   ########.fr       */
+/*   Created: 2021/05/12 14:11:07 by junhpark          #+#    #+#             */
+/*   Updated: 2021/05/12 21:03:30 by junhpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+void	free_all(t_philo *philos)
+{
+	free(philos);
+	free(g_info.forks);
+	free(g_info.full_list);
+}
+
 int		start(t_philo *philos, t_info *info)
 {
-	int i;
+	int			count;
 
-	i = 0;
-	mutex_init(info);
-	while (i < g_philo_num)
+	count = 0;
+	while (count < g_philo_num)
 	{
-		philos[i].when_eat = get_relative_time();
-		pthread_create(&philos[i].thread, NULL, philo_do, (void *)&philos[i]);
-		i++;
+		philos[count].when_eat = get_relative_time();
+		pthread_create(&philos[count].thread, NULL, philo_do, (void *)&philos[count]);
+		count += 2;
 	}
-	i = 0;
-	while (i < g_philo_num)
-		pthread_join(philos[i++].thread, NULL);
+	count = 1;
+	while (count < g_philo_num)
+	{
+		philos[count].when_eat = get_relative_time();
+		pthread_create(&philos[count].thread, NULL, philo_do, (void *)&philos[count]);
+		count += 2;
+	}
+	count = 0;
+	while (count < g_philo_num)
+	{
+		pthread_join(philos[count].thread, NULL);
+		count++;
+	}
 	return (CONTINUE);
 }
 
@@ -34,27 +50,16 @@ int		main(int argc, char *argv[])
 {
 	t_philo	*philos;
 
-	if (-1 == set_info_argv(&g_info, argc, argv))
+	if (set_info_argv(&g_info, argc, argv) < 0)
 	{
-		printf("error\n");
-		return (-1);
+		printf("Argument Error\n");
+		return (1);
 	}
-	// NOTE Setting
-	set_info(&g_info);
-	g_philo_num = g_info.number_of_philosophers;
+	init_info(&g_info);
 	philos = malloc(sizeof(t_philo) * g_philo_num);
 	set_philos(philos);
-	// NOTE Setting
-
-	// NOTE 시작
+	mutex_init(&g_info);
 	start(philos, &g_info);
 	free_all(philos);
 	return (0);
-}
-
-void	free_all(t_philo *philos)
-{
-	free(philos);
-	free(g_info.forks);
-	free(g_info.full_list);
 }

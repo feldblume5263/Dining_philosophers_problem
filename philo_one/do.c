@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   do.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yunslee <yunslee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: junhpark <junhpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/08 21:01:14 by yunslee           #+#    #+#             */
-/*   Updated: 2021/03/16 05:55:40 by yunslee          ###   ########.fr       */
+/*   Created: 2021/05/12 14:10:51 by junhpark          #+#    #+#             */
+/*   Updated: 2021/05/12 21:12:11 by junhpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int		doing(t_status status, t_philo *philo, unsigned long interval)
 {
 	int	ret;
 
-	// NOTE 출력에 대해서 mutex를 해줘야 출력이 안 꼬임. 출력하는 순간을 동기화하는 것임
 	pthread_mutex_lock(&g_info.print_mutex);
 	//
 	///*
@@ -41,8 +40,6 @@ int		doing(t_status status, t_philo *philo, unsigned long interval)
 	//*/
 	//
 	pthread_mutex_unlock(&g_info.print_mutex);
-	// NOTE 출력에 대해서 mutex를 해줘야 출력이 안 꼬임. 출력하는 순간을 동기화하는 것임
-
 	// NOTE 상태에 따라서 philo_do의 while(1)을 나갈 수 있게 함.(exit()을 쓰는 것이 편할지 모르지만, 안 써도 충분히 가능함.)
 	if (ret == CONTINUE)
 		return (CONTINUE);
@@ -61,7 +58,7 @@ void	*monitoring(void *param)
 	unsigned long	time;
 
 	philo = (t_philo *)param;
-	
+
 	while (1)
 	{
 		// NOTE 확인해야하는 것
@@ -79,9 +76,7 @@ void	*philo_do(void *param)
 
 	philo = (t_philo *)param;
 	pthread_create(&thread, NULL, monitoring, philo);
-	//
-	//
-
+	accurate_sleep(30);
 	// NOTE 먹고 자고 생각하고
 	while (1)
 	{
