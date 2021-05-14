@@ -6,7 +6,7 @@
 /*   By: junhpark <junhpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/12 14:11:13 by junhpark          #+#    #+#             */
-/*   Updated: 2021/05/15 02:41:07 by junhpark         ###   ########.fr       */
+/*   Updated: 2021/05/15 04:36:44 by junhpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <sys/time.h>
 # include <pthread.h>
 # include <string.h>
+# include <semaphore.h>
 # include <stdio.h>
 # include <stdbool.h>
 
@@ -45,9 +46,10 @@ typedef struct		s_info
 	int				meal_full;
 	unsigned long	basetime;
 	bool			anyone_dead;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	print_mutex;
+	sem_t			*forks;
+	sem_t			*print_sem;
 	char			*full_list;
+	sem_t			*eating_philo;
 }					t_info;
 
 typedef struct		s_philo
@@ -55,8 +57,6 @@ typedef struct		s_philo
 	pthread_t		thread;
 	int				index;
 	unsigned long	when_eat;
-	int				left_fork_num;
-	int				right_fork_num;
 	int				meal_num;
 }					t_philo;
 
@@ -75,8 +75,8 @@ void				free_all(t_philo *philos);
 ** setting.c
 */
 int					set_info_argv(t_info *info, int argc, char *argv[]);
-void				mutex_fork_init(t_info *info);
-void				mutex_init(t_info *info);
+// void				mutex_fork_init(t_info *info);
+void				sema_init(t_info *info);
 void				print_info(t_info *info);
 int					init_info(t_info *info);
 int					set_philos(t_philo *philos);
