@@ -6,7 +6,7 @@
 /*   By: junhpark <junhpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/12 14:11:19 by junhpark          #+#    #+#             */
-/*   Updated: 2021/05/12 17:04:55 by junhpark         ###   ########.fr       */
+/*   Updated: 2021/05/14 18:14:33 by junhpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	mutex_init(t_info *info)
 	while (idx < g_philo_num)
 	{
 		pthread_mutex_init(&(info->forks[idx]), NULL);
-		// rock과 unlock을 위해
+		// lock과 unlock을 위해
 		idx++;
 	}
 	pthread_mutex_init(&(info->print_mutex), NULL); // 마찬가지
@@ -80,7 +80,7 @@ int		set_info_argv(t_info *info, int argc, char *argv[])
 		return (-1);
 	if (argc == 6)
 	{
-		if ((info->meal_full = ft_atoi(argv[5])) < 1)
+		if ((info->meal_full = ft_atoi(argv[5])) < 0)
 			return (-1);
 	}
 	return (0);

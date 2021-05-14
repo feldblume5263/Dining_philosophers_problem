@@ -6,7 +6,7 @@
 /*   By: junhpark <junhpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/12 14:10:51 by junhpark          #+#    #+#             */
-/*   Updated: 2021/05/13 21:40:29 by junhpark         ###   ########.fr       */
+/*   Updated: 2021/05/14 18:21:39 by junhpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,31 +36,6 @@ int		print_doing(t_status status, t_philo *philo, unsigned long interval)
 		return (END);
 	}
 	return (CONTINUE);
-}
-
-int		doing(t_status status, t_philo *philo, unsigned long interval)
-{
-	int	ret;
-
-	pthread_mutex_lock(&g_info.print_mutex);
-	if (g_info.anyone_dead == TRUE)
-	{
-		pthread_mutex_unlock(&g_info.print_mutex);
-		return (END);
-	}
-	if (is_all_philos_full() == TRUE)
-	{
-		pthread_mutex_unlock(&g_info.print_mutex);
-		return (END);
-	}
-	ret = print_doing(status, philo, interval);
-	pthread_mutex_unlock(&g_info.print_mutex);
-	// NOTE 상태에 따라서 philo_do의 while(1)을 나갈 수 있게 함.(exit()을 쓰는 것이 편할지 모르지만, 안 써도 충분히 가능함.)
-	if (ret == CONTINUE)
-		return (CONTINUE);
-	else if (ret == END)
-		return (END);
-	return (END);
 }
 
 bool	is_all_philos_full()
@@ -101,6 +76,31 @@ void	*monitoring(void *param)
 	}
 	accurate_pause(5);
 	return (NULL);
+}
+
+int		doing(t_status status, t_philo *philo, unsigned long interval)
+{
+	int	ret;
+
+	pthread_mutex_lock(&g_info.print_mutex);
+	if (g_info.anyone_dead == TRUE)
+	{
+		pthread_mutex_unlock(&g_info.print_mutex);
+		return (END);
+	}
+	if (is_all_philos_full() == TRUE)
+	{
+		pthread_mutex_unlock(&g_info.print_mutex);
+		return (END);
+	}
+	ret = print_doing(status, philo, interval);
+	pthread_mutex_unlock(&g_info.print_mutex);
+	// NOTE 상태에 따라서 philo_do의 while(1)을 나갈 수 있게 함.(exit()을 쓰는 것이 편할지 모르지만, 안 써도 충분히 가능함.)
+	if (ret == CONTINUE)
+		return (CONTINUE);
+	else if (ret == END)
+		return (END);
+	return (END);
 }
 
 void	*philo_do(void *param)

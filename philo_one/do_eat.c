@@ -6,7 +6,7 @@
 /*   By: junhpark <junhpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/12 14:10:44 by junhpark          #+#    #+#             */
-/*   Updated: 2021/05/13 20:47:39 by junhpark         ###   ########.fr       */
+/*   Updated: 2021/05/14 18:16:56 by junhpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	use_fork_without_dup(t_philo *philo, t_info *info)
 	doing(EATING, philo, get_relative_time());
 	philo->when_eat = get_relative_time();
 	philo->meal_num++;
-	if (info->meal_full != FALSE && philo->meal_num > info->meal_full)
+	if (info->meal_full != FALSE && philo->meal_num >= info->meal_full)
 		info->full_list[philo->index] = 1;
 	spend_time_of(EATING);
 	pthread_mutex_unlock(&info->forks[philo->right_fork_num]);
