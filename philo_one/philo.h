@@ -6,7 +6,7 @@
 /*   By: junhpark <junhpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/12 14:11:13 by junhpark          #+#    #+#             */
-/*   Updated: 2021/05/13 21:01:59 by junhpark         ###   ########.fr       */
+/*   Updated: 2021/05/14 20:28:30 by junhpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ typedef enum
 	THINKING,
 	LEFT_TAKEN,
 	RIGHT_TAKEN,
-	DEAD
+	DEAD,
+	NOTICE
 }	t_status;
 
 typedef struct		s_info

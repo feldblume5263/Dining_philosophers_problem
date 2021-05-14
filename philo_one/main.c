@@ -6,7 +6,7 @@
 /*   By: junhpark <junhpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/12 14:11:07 by junhpark          #+#    #+#             */
-/*   Updated: 2021/05/14 18:23:53 by junhpark         ###   ########.fr       */
+/*   Updated: 2021/05/14 23:35:51 by junhpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int		start(t_philo *philos)
 	{
 		philos[count].when_eat = get_relative_time();
 		pthread_create(&philos[count].thread, NULL, philo_do, (void *)&philos[count]);
-		accurate_pause(5);
 		count += 2;
 	}
 	accurate_pause(50);
@@ -37,7 +36,6 @@ int		start(t_philo *philos)
 	{
 		philos[count].when_eat = get_relative_time();
 		pthread_create(&philos[count].thread, NULL, philo_do, (void *)&philos[count]);
-		accurate_pause(5);
 		count += 2;
 	}
 	count = 0;

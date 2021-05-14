@@ -6,7 +6,7 @@
 /*   By: junhpark <junhpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/12 14:11:19 by junhpark          #+#    #+#             */
-/*   Updated: 2021/05/14 18:14:33 by junhpark         ###   ########.fr       */
+/*   Updated: 2021/05/15 00:09:33 by junhpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,14 @@ void	mutex_init(t_info *info)
 // NOTE 철학자에 대한 정보 초기화 t_philo에 있는 값들 설정하기
 int		set_philos(t_philo *philos)
 {
-	unsigned long	init_time;
 	int				idx;
 
 	idx = -1;
 	while (++idx < g_philo_num)
 	{
 		philos[idx].meal_num = 0;
-		init_time = get_relative_time();
 		philos[idx].index = idx;
-		philos[idx].when_eat = init_time; // 시작할 때, 먹인다.
+		philos[idx].when_eat = 0;
 		philos[idx].left_fork_num = philos[idx].index;
 		philos[idx].right_fork_num = philos[idx].index + 1;
 		if (philos[idx].right_fork_num == g_philo_num)
