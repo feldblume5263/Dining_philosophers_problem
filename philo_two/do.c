@@ -6,7 +6,7 @@
 /*   By: junhpark <junhpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/12 14:10:51 by junhpark          #+#    #+#             */
-/*   Updated: 2021/05/15 04:24:00 by junhpark         ###   ########.fr       */
+/*   Updated: 2021/05/19 21:37:28 by junhpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,10 @@
 
 int		print_doing(t_status status, t_philo *philo, unsigned long interval)
 {
-	printf("[%lu]\t %d\t", interval, philo->index + 1);
 	if (g_info.meal_full != FALSE && g_info.full_list[philo->index] == true)
-	{
-		printf("is now full and happy   :)\n");
 		return (END);
-	}
-	else if (status == EATING)
+	printf("[%lu]\t %d\t", interval, philo->index + 1);
+	if (status == EATING)
 		printf("is eating\n");
 	else if (status == SLEEPING)
 		printf("is sleeping\n");
@@ -76,7 +73,6 @@ void	*monitoring(void *param)
 	}
 	if (is_all_philos_full() == false)
 		g_info.anyone_dead = TRUE;
-	accurate_pause(5);
 	return (NULL);
 }
 
@@ -84,22 +80,18 @@ int		doing(t_status status, t_philo *philo, unsigned long interval)
 {
 	int	ret;
 
-	// pthread_mutex_lock(&g_info.print_mutex);
 	sem_wait(g_info.print_sem);
 	if (g_info.anyone_dead == TRUE)
 	{
-		// pthread_mutex_unlock(&g_info.print_mutex);
 		sem_post(g_info.print_sem);
 		return (END);
 	}
 	ret = print_doing(status, philo, interval);
 	if (is_all_philos_full() == TRUE)
 	{
-		// pthread_mutex_unlock(&g_info.print_mutex);
 		sem_post(g_info.print_sem);
 		return (END);
 	}
-	// pthread_mutex_unlock(&g_info.print_mutex);
 	sem_post(g_info.print_sem);
 	if (ret == CONTINUE)
 		return (CONTINUE);
